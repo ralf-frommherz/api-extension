@@ -2,6 +2,7 @@
   "name": "cs/api-extension",
   "description": "Symfony api extension",
   "license": "MIT",
+  "type": "library",
   "version": "1.0.0",
   "require": {
     "php": "^7.4",
