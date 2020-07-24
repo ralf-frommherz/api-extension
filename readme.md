@@ -6,7 +6,7 @@ Api extension allows you to easy create custom api endpoints
 The api entity represents your entity that you want to expose. You just have to create a regular class that extends the
 ApiEntity.
 
-### ReferenceAnnotations
+### reference annotations
 If you want to use references, you can use the reference annotation. Now api extension will accept and provide uris 
 instead of the actual object.
 
