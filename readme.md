@@ -6,30 +6,13 @@ Api extension allows you to easy create custom api endpoints
 The api entity represents your entity that you want to expose. You just have to create a regular class that extends the
 ApiEntity.
 
-### reference annotations
-If you want to use references, you can use the reference annotation. Now api extension will accept and provide uris 
-instead of the actual object.
-
-#### example
-```
-use Cs\ApiExtensionBundle\Api\Entity\Annotations\ReferenceMany;
-use Cs\ApiExtensionBundle\Api\Entity\Annotations\ReferenceOne;
-
-class ... extends ApiEntity
-{
-    /**
-     * @ReferenceOne(type=SomeEntity::class)
-     * @var SomeEntity
-     */
-    protected SomeEntity $someEntity;
-```
-
 ```php
 <?php
 
 namespace App\Api\Task;
 
 use Cs\ApiExtensionBundle\Api\Entity\ApiEntity;
+use Cs\ApiExtensionBundle\Api\Entity\Traits\IdAwareApiEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -38,6 +21,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class TaskEntity extends ApiEntity
 {
+    use IdAwareApiEntity;
+
     /**
      * @Assert\NotBlank()
      * @var string
@@ -60,6 +45,36 @@ class TaskEntity extends ApiEntity
         $this->name = $name;
     }
 }
+```
+
+### reference annotations
+If you want to use references, you can use the reference annotation. Now api extension will accept and provide uris 
+instead of the actual object.
+
+#### example
+```php
+use Cs\ApiExtensionBundle\Api\Entity\Annotations\ReferenceMany;
+use Cs\ApiExtensionBundle\Api\Entity\Annotations\ReferenceOne;
+
+class ... extends ApiEntity
+{
+    /**
+     * @ReferenceOne(type=SomeEntity::class)
+     * @var SomeEntity
+     */
+    protected SomeEntity $someEntity;
+```
+
+### IdAwareApiEntity
+The IdAwareApiEntity trait provides an id field in your entity that is automatically used in your requests.
+
+#### example
+```php
+use Cs\ApiExtensionBundle\Api\Entity\Traits\IdAwareApiEntity;
+
+class ... extends ApiEntity
+{
+    use IdAwareApiEntity;
 ```
 
 ## api entity collection
@@ -104,7 +119,7 @@ Operation annotations tell the api what operation your action is for. This infor
 
 ### example
 
-```
+```php
 <?php
 
 

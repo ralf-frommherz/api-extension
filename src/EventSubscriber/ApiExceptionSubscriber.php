@@ -6,8 +6,8 @@ namespace Cs\ApiExtensionBundle\EventSubscriber;
 
 use Cs\ApiExtensionBundle\Api\Response\ApiErrorResponse;
 use Cs\ApiExtensionBundle\Exception\ApiExceptionInterface;
-use Cs\ApiExtensionBundle\Exception\ApiEntityNotFoundException;
 use Cs\ApiExtensionBundle\Exception\ApiConstraintViolationException;
+use Cs\ApiExtensionBundle\Service\ApiRouteService;
 use ReflectionClass;
 use ReflectionException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -23,10 +23,10 @@ use Throwable;
 /**
  * Deals with api exceptions
  *
- * Class ExceptionSubscriber
+ * Class ApiExceptionSubscriber
  * @package Cs\ApiExtensionBundle\EventSubscriber
  */
-class ExceptionSubscriber implements EventSubscriberInterface
+class ApiExceptionSubscriber implements EventSubscriberInterface
 {
     /**
      * @var NormalizerInterface
@@ -59,32 +59,30 @@ class ExceptionSubscriber implements EventSubscriberInterface
      */
     public function onException(ExceptionEvent $event): void
     {
-        $ex = $event->getThrowable();
-
-        if(!$ex instanceof ApiExceptionInterface)
-        {
+        $request = $event->getRequest();
+        if ($request->attributes->get('routeType') !== ApiRouteService::ROUTE_TYPE_NAME) {
             return;
         }
 
-        $statusCode = Response::HTTP_INTERNAL_SERVER_ERROR;
+        $ex = $event->getThrowable();
         $errorResponse = new ApiErrorResponse();
 
-        if($ex instanceof ApiConstraintViolationException)
-        {
-            $statusCode = Response::HTTP_BAD_REQUEST;
+        if ($ex instanceof ApiConstraintViolationException) {
             $this->onConstraintViolationException($ex, $errorResponse);
-        }
-        elseif($ex instanceof ApiEntityNotFoundException)
-        {
-            $statusCode = Response::HTTP_NOT_FOUND;
-            $this->onGenericApiException($ex, $errorResponse);
-        }
-        else
-        {
+        } else {
             $this->onGenericApiException($ex, $errorResponse);
         }
 
-        $event->setResponse(new JsonResponse($this->normalizer->normalize($errorResponse), $statusCode));
+        $statusCode = Response::HTTP_INTERNAL_SERVER_ERROR;
+        if($ex instanceof ApiExceptionInterface)
+        {
+            $statusCode = $ex->getStatusCode();
+        }
+
+        $event->setResponse(new JsonResponse(
+            $this->normalizer->normalize($errorResponse),
+            $statusCode
+        ));
     }
 
     /**
@@ -97,8 +95,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
     public function onConstraintViolationException(ApiConstraintViolationException $exception, ApiErrorResponse $errorResponse): void
     {
         /** @var ConstraintViolation $violation */
-        foreach ($exception->getConstraintViolationListInterface() as $violation)
-        {
+        foreach ($exception->getConstraintViolationListInterface() as $violation) {
             $errorResponse->addPropertyError(
                 $this->getExceptionShortName($exception),
                 $violation->getMessage(),

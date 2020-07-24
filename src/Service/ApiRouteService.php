@@ -101,7 +101,8 @@ class ApiRouteService
                         '_controller' => $reflectionClass->getName().'::'.$reflectionMethod->getName(),
                         'resource' => $resourceName,
                         'entity' => $apiControllerAnnotation->getEntity(),
-                        'operation' => $operationAnnotation->getType()
+                        'operation' => $operationAnnotation->getType(),
+                        'routeType' => self::ROUTE_TYPE_NAME
                     ],
                     'methods' => [self::OPERATION_METHOD_MAPPING[$operationAnnotation->getType()]]
                 ];
