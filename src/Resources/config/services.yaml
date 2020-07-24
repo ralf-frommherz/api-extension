@@ -1,0 +1,17 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Cs\ApiExtensionBundle\:
+        resource: '../../*'
+        exclude: '../../{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+
+    Cs\ApiExtensionBundle\Api\Controller\ApiControllerCollection:
+        arguments:
+            $controllers: !tagged api-extension.api.controller
+
+    cs_api_extension.routing.api_loader:
+        class: Cs\ApiExtensionBundle\Routing\ApiLoader
+        tags:
+            - { name: routing.loader }

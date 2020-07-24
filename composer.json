@@ -1,0 +1,17 @@
+{
+  "name": "cs/api-extension",
+  "description": "Symfony api extension",
+  "version": "dev-master",
+  "require": {
+    "php": "^7.4",
+    "symfony/serializer": "5.1.*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^7"
+  },
+  "autoload": {
+    "psr-4" : {
+      "Cs\\ApiExtensionBundle\\" : "src"
+    }
+  }
+}
