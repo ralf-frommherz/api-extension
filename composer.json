@@ -1,7 +1,8 @@
 {
   "name": "cs/api-extension",
   "description": "Symfony api extension",
-  "version": "dev-master",
+  "license": "MIT",
+  "version": "1.0.0",
   "require": {
     "php": "^7.4",
     "symfony/serializer": "5.1.*"
