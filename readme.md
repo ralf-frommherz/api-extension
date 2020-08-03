@@ -1,3 +1,8 @@
+![Packagist PHP Version Support](https://img.shields.io/packagist/php-v/corey-mac/api-extension)
+![GitHub issues](https://img.shields.io/github/issues/corey-mac/api-extension)
+![Packagist License](https://img.shields.io/packagist/l/corey-mac/api-extension)
+![GitHub last commit](https://img.shields.io/github/last-commit/corey-mac/api-extension)
+
 # Api extension
 Api extension allows you to easy create custom api endpoints
 
