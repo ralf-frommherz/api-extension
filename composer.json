@@ -4,7 +4,7 @@
   "type": "symfony-bundle",
   "keywords": ["symfony", "symfony5", "api", "rest"],
   "license": "MIT",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "require": {
     "php": "^7.4",
     "symfony/serializer": "5.3.*",
